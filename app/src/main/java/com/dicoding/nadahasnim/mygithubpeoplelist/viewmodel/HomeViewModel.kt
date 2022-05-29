@@ -24,7 +24,7 @@ class HomeViewModel : ViewModel() {
         fetchAllUsers()
     }
 
-    private fun fetchAllUsers() {
+    fun fetchAllUsers() {
         _responseCall.value = ResponseCall(Status.LOADING)
 
         val client = ApiConfig.getApiService().getAllUsers()

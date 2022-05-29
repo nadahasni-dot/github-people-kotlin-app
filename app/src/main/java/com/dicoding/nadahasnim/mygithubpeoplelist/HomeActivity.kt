@@ -1,13 +1,19 @@
 package com.dicoding.nadahasnim.mygithubpeoplelist
 
+import android.app.SearchManager
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.nadahasnim.mygithubpeoplelist.adapter.ListPeopleAdapter
 import com.dicoding.nadahasnim.mygithubpeoplelist.databinding.ActivityHomeBinding
+import com.dicoding.nadahasnim.mygithubpeoplelist.model.People
 import com.dicoding.nadahasnim.mygithubpeoplelist.model.ResponseListUsersItem
 import com.dicoding.nadahasnim.mygithubpeoplelist.service.ResponseCall
 import com.dicoding.nadahasnim.mygithubpeoplelist.service.Status
@@ -32,10 +38,38 @@ class HomeActivity : AppCompatActivity() {
             it.listUsers.observe(this) { listUsers ->
                 showRecyclerList(listUsers)
             }
-            it.responseCall.observe(this) {request ->
+            it.responseCall.observe(this) { request ->
                 showLoadingIndicator(request)
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_home, menu)
+
+        val searchManager = getSystemService<SearchManager>()
+        val searchView = menu.findItem(R.id.search).actionView as SearchView
+
+        searchView.setSearchableInfo(searchManager?.getSearchableInfo(componentName))
+        searchView.queryHint = resources.getString(R.string.search_hint)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    homeViewModel.searchUsers(query)
+                } else {
+                    homeViewModel.fetchAllUsers()
+                }
+
+                searchView.clearFocus()
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
+
+        return true
     }
 
     private fun showLoadingIndicator(request: ResponseCall) {
@@ -68,9 +102,14 @@ class HomeActivity : AppCompatActivity() {
     fun openDetail(data: ResponseListUsersItem) {
         Log.d(TAG, data.toString())
 
-//        val moveToDetailIntent = Intent(this@HomeActivity, DetailActivity::class.java)
-//        moveToDetailIntent.putExtra(DetailActivity.EXTRA_PEOPLE, data)
-//        startActivity(moveToDetailIntent)
+        val moveToDetailIntent = Intent(this@HomeActivity, DetailActivity::class.java)
+        moveToDetailIntent.putExtra(
+            DetailActivity.EXTRA_PEOPLE, People(
+                data.login,
+                data.htmlUrl,
+            )
+        )
+        startActivity(moveToDetailIntent)
     }
 
     companion object {

@@ -3,8 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/layout/activity_detail.xml" value="0.25" />
         <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/layout/activity_home.xml" value="0.2" />
+        <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/layout/detail_content.xml" value="0.11594202898550725" />
         <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/layout/item_row_people.xml" value="0.25" />
+        <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/menu/menu_home.xml" value="0.22447916666666667" />
       </map>
     </option>
   </component>

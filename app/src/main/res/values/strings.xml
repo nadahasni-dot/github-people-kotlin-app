@@ -4,15 +4,17 @@
     <string name="github_people_list">Github People List</string>
     <string name="by_nadahasnim">by @nadahasnim</string>
     <string name="name">Name</string>
-    <string name="username">/@username</string>
+    <string name="username">\@%1$s</string>
     <string name="company_name">Company Name</string>
-    <string name="_100">100</string>
+    <string name="_100">0</string>
     <string name="repositories">repositories</string>
     <string name="followers">followers</string>
     <string name="following">following</string>
     <string name="location">Location</string>
     <string name="company">Company</string>
     <string name="share">Share</string>
+    <string name="search">Search Username</string>
+    <string name="search_hint">Search Username</string>
 
     <string-array name="username">
         <item>JakeWharton</item>
