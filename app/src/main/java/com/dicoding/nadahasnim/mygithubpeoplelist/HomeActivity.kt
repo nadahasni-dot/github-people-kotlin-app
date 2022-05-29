@@ -1,84 +1,79 @@
 package com.dicoding.nadahasnim.mygithubpeoplelist
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.nadahasnim.mygithubpeoplelist.adapter.ListPeopleAdapter
 import com.dicoding.nadahasnim.mygithubpeoplelist.databinding.ActivityHomeBinding
-import com.dicoding.nadahasnim.mygithubpeoplelist.model.People
+import com.dicoding.nadahasnim.mygithubpeoplelist.model.ResponseListUsersItem
+import com.dicoding.nadahasnim.mygithubpeoplelist.service.ResponseCall
+import com.dicoding.nadahasnim.mygithubpeoplelist.service.Status
+import com.dicoding.nadahasnim.mygithubpeoplelist.viewmodel.HomeViewModel
 
 class HomeActivity : AppCompatActivity() {
-    private val list = ArrayList<People>()
 
-    companion object {
-        const val TAG = "Home Activity"
-    }
+    private lateinit var binding: ActivityHomeBinding
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val binding = ActivityHomeBinding.inflate(layoutInflater)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         supportActionBar?.title = "Github Users"
 
+        binding.rvPeople.layoutManager = LinearLayoutManager(this)
         binding.rvPeople.setHasFixedSize(true)
 
-        list.addAll(listPeople)
-        showRecyclerList(binding)
+        homeViewModel.let {
+            it.listUsers.observe(this) { listUsers ->
+                showRecyclerList(listUsers)
+            }
+            it.responseCall.observe(this) {request ->
+                showLoadingIndicator(request)
+            }
+        }
     }
 
-    private val listPeople: ArrayList<People>
-        get() {
-            val dataUsername = resources.getStringArray(R.array.username)
-            val dataName = resources.getStringArray(R.array.name)
-            val dataCompany = resources.getStringArray(R.array.company)
-            val dataAvatar = resources.obtainTypedArray(R.array.avatar)
-            val dataFollower = resources.getStringArray(R.array.followers)
-            val dataFollowing = resources.getStringArray(R.array.following)
-            val dataLocation = resources.getStringArray(R.array.location)
-            val dataRepository = resources.getStringArray(R.array.repository)
-
-            val listHero = ArrayList<People>()
-
-            for (i in dataName.indices) {
-                val hero = People(
-                    username = dataUsername[i],
-                    name = dataName[i],
-                    company = dataCompany[i],
-                    avatar = dataAvatar.getResourceId(i, -1),
-                    follower = dataFollower[i],
-                    following = dataFollowing[i],
-                    location = dataLocation[i],
-                    repository = dataRepository[i],
-                )
-
-                listHero.add(hero)
-            }
-
-            dataAvatar.recycle()
-
-            return listHero
+    private fun showLoadingIndicator(request: ResponseCall) {
+        if (request.status == Status.LOADING) {
+            binding.rvPeople.visibility = View.INVISIBLE
+            binding.progressBar.visibility = View.VISIBLE
+            return
         }
 
+        if (request.status == Status.ERROR) {
+            return
+        }
 
-    private fun showRecyclerList(binding: ActivityHomeBinding) {
-        binding.rvPeople.layoutManager = LinearLayoutManager(this)
+        if (request.status == Status.COMPLETED) {
+            binding.progressBar.visibility = View.INVISIBLE
+            binding.rvPeople.visibility = View.VISIBLE
+            return
+        }
+    }
+
+    private fun showRecyclerList(list: List<ResponseListUsersItem>) {
         val listPeopleAdapter = ListPeopleAdapter(list)
         binding.rvPeople.adapter = listPeopleAdapter
 
         listPeopleAdapter.setOnItemClickCallback(object : ListPeopleAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: People) = openDetail(data)
+            override fun onItemClicked(data: ResponseListUsersItem) = openDetail(data)
         })
     }
 
-    fun openDetail(data: People) {
+    fun openDetail(data: ResponseListUsersItem) {
         Log.d(TAG, data.toString())
 
-        val moveToDetailIntent = Intent(this@HomeActivity, DetailActivity::class.java)
-        moveToDetailIntent.putExtra(DetailActivity.EXTRA_PEOPLE, data)
-        startActivity(moveToDetailIntent)
+//        val moveToDetailIntent = Intent(this@HomeActivity, DetailActivity::class.java)
+//        moveToDetailIntent.putExtra(DetailActivity.EXTRA_PEOPLE, data)
+//        startActivity(moveToDetailIntent)
+    }
+
+    companion object {
+        const val TAG = "Home Activity"
     }
 }

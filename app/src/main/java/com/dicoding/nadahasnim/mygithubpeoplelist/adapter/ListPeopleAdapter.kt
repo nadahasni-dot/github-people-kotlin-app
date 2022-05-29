@@ -3,10 +3,12 @@ package com.dicoding.nadahasnim.mygithubpeoplelist.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.dicoding.nadahasnim.mygithubpeoplelist.databinding.ItemRowPeopleBinding
 import com.dicoding.nadahasnim.mygithubpeoplelist.model.People
+import com.dicoding.nadahasnim.mygithubpeoplelist.model.ResponseListUsersItem
 
-class ListPeopleAdapter(private val listPeople: ArrayList<People>) :
+class ListPeopleAdapter(private val listPeople: List<ResponseListUsersItem>) :
     RecyclerView.Adapter<ListPeopleAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
@@ -22,12 +24,12 @@ class ListPeopleAdapter(private val listPeople: ArrayList<People>) :
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val (username, name, avatar, company) = listPeople[position]
+        val people: ResponseListUsersItem = listPeople[position]
 
-        holder.binding.tvName.text = name
-        holder.binding.tvUsername.text = username
-        holder.binding.tvCompany.text = company
-        holder.binding.ivAvatar.setImageResource(avatar)
+        holder.binding.tvName.text = people.login
+        Glide.with(holder.binding.ivAvatar.context)
+            .load(people.avatarUrl)
+            .into(holder.binding.ivAvatar)
 
         holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(listPeople[position]) }
     }
@@ -38,6 +40,6 @@ class ListPeopleAdapter(private val listPeople: ArrayList<People>) :
         RecyclerView.ViewHolder(binding.root)
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: People)
+        fun onItemClicked(data: ResponseListUsersItem)
     }
 }

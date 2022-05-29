@@ -2,12 +2,6 @@ package com.dicoding.nadahasnim.mygithubpeoplelist.model
 
 import com.google.gson.annotations.SerializedName
 
-data class ResponseListUsers(
-
-	@field:SerializedName("ResponseListUsers")
-	val responseListUsers: List<ResponseListUsersItem>
-)
-
 data class ResponseListUsersItem(
 
 	@field:SerializedName("gists_url")

@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dicoding.nadahasnim.mygithubpeoplelist.config.ApiConfig
-import com.dicoding.nadahasnim.mygithubpeoplelist.model.ResponseListUsers
 import com.dicoding.nadahasnim.mygithubpeoplelist.model.ResponseListUsersItem
 import com.dicoding.nadahasnim.mygithubpeoplelist.model.ResponseSearchUsers
 import com.dicoding.nadahasnim.mygithubpeoplelist.service.ResponseCall
@@ -29,13 +28,13 @@ class HomeViewModel : ViewModel() {
         _responseCall.value = ResponseCall(Status.LOADING)
 
         val client = ApiConfig.getApiService().getAllUsers()
-        client.enqueue(object : Callback<ResponseListUsers> {
+        client.enqueue(object : Callback<List<ResponseListUsersItem>> {
             override fun onResponse(
-                call: Call<ResponseListUsers>,
-                response: Response<ResponseListUsers>
+                call: Call<List<ResponseListUsersItem>>,
+                response: Response<List<ResponseListUsersItem>>
             ) {
                 if (response.isSuccessful) {
-                    _listUsers.value = response.body()?.responseListUsers
+                    _listUsers.value = response.body()
                     _responseCall.value = ResponseCall(Status.COMPLETED)
                 } else {
                     _responseCall.value = ResponseCall(Status.ERROR, response.message())
@@ -43,7 +42,7 @@ class HomeViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<ResponseListUsers>, t: Throwable) {
+            override fun onFailure(call: Call<List<ResponseListUsersItem>>, t: Throwable) {
                 _responseCall.value = ResponseCall(Status.ERROR, t.message)
                 Log.e(TAG, "onFailure: ${t.message}")
             }
