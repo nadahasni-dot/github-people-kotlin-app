@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.nadahasnim.mygithubpeoplelist.DetailActivity
-import com.dicoding.nadahasnim.mygithubpeoplelist.HomeActivity
 import com.dicoding.nadahasnim.mygithubpeoplelist.adapter.ListPeopleAdapter
 import com.dicoding.nadahasnim.mygithubpeoplelist.databinding.FragmentFollowersBinding
 import com.dicoding.nadahasnim.mygithubpeoplelist.model.People
