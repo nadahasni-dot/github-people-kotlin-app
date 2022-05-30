@@ -74,16 +74,26 @@ class HomeActivity : AppCompatActivity() {
 
     private fun showLoadingIndicator(request: ResponseCall) {
         if (request.status == Status.LOADING) {
+            binding.errorLayout.root.visibility = View.INVISIBLE
             binding.rvPeople.visibility = View.INVISIBLE
             binding.progressBar.visibility = View.VISIBLE
             return
         }
 
         if (request.status == Status.ERROR) {
+            binding.errorLayout.tvError.text = request.message
+            binding.errorLayout.btnReload.setOnClickListener {
+                homeViewModel.fetchAllUsers()
+            }
+
+            binding.rvPeople.visibility = View.INVISIBLE
+            binding.progressBar.visibility = View.INVISIBLE
+            binding.errorLayout.root.visibility = View.VISIBLE
             return
         }
 
         if (request.status == Status.COMPLETED) {
+            binding.errorLayout.root.visibility = View.INVISIBLE
             binding.progressBar.visibility = View.INVISIBLE
             binding.rvPeople.visibility = View.VISIBLE
             return

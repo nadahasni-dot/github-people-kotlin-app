@@ -2,6 +2,7 @@ package com.dicoding.nadahasnim.mygithubpeoplelist.service
 
 import com.dicoding.nadahasnim.mygithubpeoplelist.model.ResponseDetailUser
 import com.dicoding.nadahasnim.mygithubpeoplelist.model.ResponseListUsersItem
+import com.dicoding.nadahasnim.mygithubpeoplelist.model.ResponseRepositories
 import com.dicoding.nadahasnim.mygithubpeoplelist.model.ResponseSearchUsers
 import retrofit2.Call
 import retrofit2.http.*
@@ -34,4 +35,10 @@ interface ApiService {
     fun getFollowing(
         @Path("username") username: String
     ): Call<List<ResponseListUsersItem>>
+
+    @GET("users/{username}/repos")
+    @Headers("Authorization: token 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")
+    fun getRepositories(
+        @Path("username") username: String
+    ): Call<List<ResponseRepositories>>
 }

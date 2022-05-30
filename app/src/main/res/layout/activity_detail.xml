@@ -23,5 +23,12 @@
         android:id="@+id/detailContent"
         layout="@layout/detail_content" />
 
+    <include
+        android:id="@+id/errorLayout"
+        layout="@layout/error_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

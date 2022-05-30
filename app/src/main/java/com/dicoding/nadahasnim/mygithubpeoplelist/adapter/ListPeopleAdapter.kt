@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dicoding.nadahasnim.mygithubpeoplelist.databinding.ItemRowPeopleBinding
-import com.dicoding.nadahasnim.mygithubpeoplelist.model.People
 import com.dicoding.nadahasnim.mygithubpeoplelist.model.ResponseListUsersItem
 
 class ListPeopleAdapter(private val listPeople: List<ResponseListUsersItem>) :

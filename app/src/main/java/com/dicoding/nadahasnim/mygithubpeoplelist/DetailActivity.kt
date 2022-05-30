@@ -8,74 +8,97 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
+import androidx.annotation.StringRes
 import com.bumptech.glide.Glide
+import com.dicoding.nadahasnim.mygithubpeoplelist.adapter.DetailSectionsPagerAdapter
 import com.dicoding.nadahasnim.mygithubpeoplelist.databinding.ActivityDetailBinding
 import com.dicoding.nadahasnim.mygithubpeoplelist.model.People
 import com.dicoding.nadahasnim.mygithubpeoplelist.model.ResponseDetailUser
 import com.dicoding.nadahasnim.mygithubpeoplelist.service.ResponseCall
 import com.dicoding.nadahasnim.mygithubpeoplelist.service.Status
 import com.dicoding.nadahasnim.mygithubpeoplelist.viewmodel.DetailViewModel
+import com.dicoding.nadahasnim.mygithubpeoplelist.viewmodel.DetailViewModelFactory
+import com.google.android.material.tabs.TabLayoutMediator
 
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
     private lateinit var people: People
-    private val detailViewModel: DetailViewModel by viewModels()
+    private val detailViewModel: DetailViewModel by viewModels { DetailViewModelFactory(people.username) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = "Detail User"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-
         people = intent.getParcelableExtra(EXTRA_PEOPLE)!!
 
-        detailViewModel.getUser(people.username)
+        supportActionBar.let {
+            it?.title = resources.getString(R.string.username, people.username)
+            it?.setDisplayHomeAsUpEnabled(true)
+            it?.setDisplayShowHomeEnabled(true)
+        }
 
         detailViewModel.let {
-            it.detailUser.observe(this) { detailUser ->
-                showContent(detailUser)
-            }
             it.responseCall.observe(this) { request ->
+                val detail = it.detailUser.value
+                val followers = it.followers.value
+                val following = it.following.value
+
+                binding.detailContent.tvFollower.text = followers?.size.toString()
+                binding.detailContent.tvFollowing.text = following?.size.toString()
+                binding.detailContent.tvRepositories.text = it.repositories.value.toString()
+
+                if (detail != null) {
+                    showContent(detail)
+                }
+
                 showLoadingIndicator(request)
             }
         }
 
-//        binding.ivAvatar.setImageResource(people.avatar)
-//        binding.tvName.text = people.name
-//        binding.tvUsername.text = people.username
-//        binding.tvRepositories.text = people.repository
-//        binding.tvFollower.text = people.follower
-//        binding.tvFollowing.text = people.following
-//        binding.tvLocation.text = people.location
-//        binding.tvCompany.text = people.company
     }
 
-    private fun showContent(detailUser: ResponseDetailUser) {
+    private fun showContent(
+        detailUser: ResponseDetailUser
+    ) {
+        val detailSectionsPagerAdapter =
+            DetailSectionsPagerAdapter(this)
+
         binding.detailContent.let {
             Glide.with(this).load(detailUser.avatarUrl).into(it.ivAvatar)
             it.tvName.text = detailUser.name
-            it.tvUsername.text = resources.getString(R.string.username, detailUser.login)
             it.tvCompany.text = detailUser.company
             it.tvLocation.text = detailUser.location
+
+            it.viewPager.adapter = detailSectionsPagerAdapter
+            TabLayoutMediator(it.tabs, it.viewPager) { tab, position ->
+                tab.text = resources.getString(TAB_TITLES[position])
+            }.attach()
         }
     }
 
     private fun showLoadingIndicator(request: ResponseCall) {
         if (request.status == Status.LOADING) {
+            binding.errorLayout.root.visibility = View.INVISIBLE
             binding.detailContent.root.visibility = View.INVISIBLE
             binding.progressBar.visibility = View.VISIBLE
             return
         }
 
         if (request.status == Status.ERROR) {
+            binding.errorLayout.tvError.text = request.message
+            binding.errorLayout.btnReload.setOnClickListener {
+                detailViewModel.getUser(people.username)
+            }
+            binding.detailContent.root.visibility = View.INVISIBLE
+            binding.progressBar.visibility = View.INVISIBLE
+            binding.errorLayout.root.visibility = View.VISIBLE
             return
         }
 
         if (request.status == Status.COMPLETED) {
+            binding.errorLayout.root.visibility = View.INVISIBLE
             binding.progressBar.visibility = View.INVISIBLE
             binding.detailContent.root.visibility = View.VISIBLE
             return
@@ -119,5 +142,11 @@ class DetailActivity : AppCompatActivity() {
     companion object {
         const val TAG = "DetailActivity"
         const val EXTRA_PEOPLE = "extra_pople"
+
+        @StringRes
+        private val TAB_TITLES = intArrayOf(
+            R.string.followers_tab,
+            R.string.following_tab
+        )
     }
 }
