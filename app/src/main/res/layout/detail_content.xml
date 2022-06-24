@@ -19,13 +19,13 @@
 
     <TextView
         android:id="@+id/tv_name"
+        style="@style/TextCardColor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="@string/name"
-        android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,10 +35,10 @@
 
     <TextView
         android:id="@+id/tv_repositories"
+        style="@style/TextCardColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/_100"
-        android:textColor="@color/black"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tv_repositories_label"
@@ -62,10 +62,10 @@
 
     <TextView
         android:id="@+id/tv_follower"
+        style="@style/TextCardColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/_100"
-        android:textColor="@color/black"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tv_follower_label"
@@ -88,10 +88,10 @@
 
     <TextView
         android:id="@+id/tv_following"
+        style="@style/TextCardColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/_100"
-        android:textColor="@color/black"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tv_following_label"
@@ -116,6 +116,7 @@
 
     <ImageView
         android:id="@+id/imageView"
+        style="@style/IconTintColor"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="16dp"
@@ -123,24 +124,24 @@
         android:contentDescription="@string/location"
         android:src="@drawable/ic_baseline_location_on_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_name"
-        app:tint="@color/grey_700" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <TextView
         android:id="@+id/tv_location"
+        style="@style/TextCardColor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:text="@string/location"
-        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <ImageView
         android:id="@+id/imageView2"
+        style="@style/IconTintColor"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="16dp"
@@ -148,27 +149,26 @@
         android:contentDescription="@string/location"
         android:src="@drawable/ic_baseline_work_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_location"
-        app:tint="@color/grey_700" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_location" />
 
     <TextView
         android:id="@+id/tv_company"
+        style="@style/TextCardColor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
         android:text="@string/company"
-        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="@+id/imageView2" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
+        style="@style/TextTabColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@color/white"
         android:contentDescription="@string/app_name"
         android:elevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -176,8 +176,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_company"
         app:tabIndicatorColor="@color/black"
         app:tabIndicatorHeight="4dp"
-        app:tabRippleColor="@color/grey_100"
-        app:tabTextColor="@android:color/black" />
+        app:tabRippleColor="@color/grey_100" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"

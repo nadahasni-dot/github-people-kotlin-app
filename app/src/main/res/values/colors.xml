@@ -5,6 +5,9 @@
     <color name="grey_200">#718792</color>
     <color name="grey_500">#455a64</color>
     <color name="grey_700">#1c313a</color>
-    <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="black_200">#323232</color>
+    <color name="black_500">#232323</color>
+    <color name="black_700">#1E1E1E</color>
 </resources>

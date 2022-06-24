@@ -1,15 +1,22 @@
 package com.dicoding.nadahasnim.mygithubpeoplelist
 
 import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.getSystemService
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.nadahasnim.mygithubpeoplelist.adapter.ListPeopleAdapter
 import com.dicoding.nadahasnim.mygithubpeoplelist.databinding.ActivityHomeBinding
@@ -17,17 +24,26 @@ import com.dicoding.nadahasnim.mygithubpeoplelist.model.People
 import com.dicoding.nadahasnim.mygithubpeoplelist.model.ResponseListUsersItem
 import com.dicoding.nadahasnim.mygithubpeoplelist.service.ResponseCall
 import com.dicoding.nadahasnim.mygithubpeoplelist.service.Status
+import com.dicoding.nadahasnim.mygithubpeoplelist.settings.SettingPreferences
 import com.dicoding.nadahasnim.mygithubpeoplelist.viewmodel.HomeViewModel
+import com.dicoding.nadahasnim.mygithubpeoplelist.viewmodel.ThemeViewModel
+import com.dicoding.nadahasnim.mygithubpeoplelist.viewmodel.ThemeViewModelFactory
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class HomeActivity : AppCompatActivity() {
 
     private var binding: ActivityHomeBinding? = null
     private val homeViewModel: HomeViewModel by viewModels()
+    private var themeViewModel: ThemeViewModel? = null
+    private var isDarkMode: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding?.root)
+
+        initiateTheme()
 
         supportActionBar?.title = "Github Users"
 
@@ -70,6 +86,33 @@ class HomeActivity : AppCompatActivity() {
         })
 
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.switch_theme -> {
+                if (isDarkMode != null) {
+                    themeViewModel?.saveThemeSetting(!isDarkMode!!)
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun initiateTheme() {
+        val pref = SettingPreferences.getInstance(dataStore)
+        themeViewModel =
+            ViewModelProvider(this, ThemeViewModelFactory(pref))[ThemeViewModel::class.java]
+
+        themeViewModel?.getThemeSettings()?.observe(this) { isDarkModeActive: Boolean ->
+            isDarkMode = isDarkModeActive
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
     }
 
     private fun showLoadingIndicator(request: ResponseCall) {

@@ -3,13 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/drawable/ic_baseline_bookmark_24.xml" value="0.1" />
+        <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/drawable/ic_baseline_dark_mode_24.xml" value="0.1" />
+        <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/drawable/ic_baseline_light_mode_24.xml" value="0.1" />
+        <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.1" />
         <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/layout/activity_detail.xml" value="0.2" />
         <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/layout/activity_home.xml" value="0.25" />
         <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/layout/detail_content.xml" value="0.25" />
         <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/layout/error_layout.xml" value="0.22" />
         <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/layout/fragment_followers.xml" value="0.25" />
         <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/layout/fragment_following.xml" value="0.11594202898550725" />
-        <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/layout/item_row_people.xml" value="0.25" />
+        <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/layout/item_row_people.xml" value="0.1" />
         <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/menu/menu_detail.xml" value="0.1" />
         <entry key="..\:/Users/Nada/Documents/dicoding/MyGithubPeopleList/app/src/main/res/menu/menu_home.xml" value="0.22447916666666667" />
       </map>

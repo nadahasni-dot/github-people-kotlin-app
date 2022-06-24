@@ -19,4 +19,6 @@
     <string name="search_hint">Search Username</string>
     <string name="reload">Reload</string>
     <string name="error_occured">Error occurred</string>
+    <string name="switch_theme">Switch Theme</string>
+    <string name="bookmarked_profile">Saved Profile</string>
 </resources>
