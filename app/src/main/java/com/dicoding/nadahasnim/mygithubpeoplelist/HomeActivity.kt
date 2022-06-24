@@ -21,18 +21,18 @@ import com.dicoding.nadahasnim.mygithubpeoplelist.viewmodel.HomeViewModel
 
 class HomeActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityHomeBinding
+    private var binding: ActivityHomeBinding? = null
     private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(binding?.root)
 
         supportActionBar?.title = "Github Users"
 
-        binding.rvPeople.layoutManager = LinearLayoutManager(this)
-        binding.rvPeople.setHasFixedSize(true)
+        binding?.rvPeople?.layoutManager = LinearLayoutManager(this)
+        binding?.rvPeople?.setHasFixedSize(true)
 
         homeViewModel.let {
             it.listUsers.observe(this) { listUsers ->
@@ -74,35 +74,35 @@ class HomeActivity : AppCompatActivity() {
 
     private fun showLoadingIndicator(request: ResponseCall) {
         if (request.status == Status.LOADING) {
-            binding.errorLayout.root.visibility = View.INVISIBLE
-            binding.rvPeople.visibility = View.INVISIBLE
-            binding.progressBar.visibility = View.VISIBLE
+            binding?.errorLayout?.root?.visibility = View.INVISIBLE
+            binding?.rvPeople?.visibility = View.INVISIBLE
+            binding?.progressBar?.visibility = View.VISIBLE
             return
         }
 
         if (request.status == Status.ERROR) {
-            binding.errorLayout.tvError.text = request.message
-            binding.errorLayout.btnReload.setOnClickListener {
+            binding?.errorLayout?.tvError?.text = request.message
+            binding?.errorLayout?.btnReload?.setOnClickListener {
                 homeViewModel.fetchAllUsers()
             }
 
-            binding.rvPeople.visibility = View.INVISIBLE
-            binding.progressBar.visibility = View.INVISIBLE
-            binding.errorLayout.root.visibility = View.VISIBLE
+            binding?.rvPeople?.visibility = View.INVISIBLE
+            binding?.progressBar?.visibility = View.INVISIBLE
+            binding?.errorLayout?.root?.visibility = View.VISIBLE
             return
         }
 
         if (request.status == Status.COMPLETED) {
-            binding.errorLayout.root.visibility = View.INVISIBLE
-            binding.progressBar.visibility = View.INVISIBLE
-            binding.rvPeople.visibility = View.VISIBLE
+            binding?.errorLayout?.root?.visibility = View.INVISIBLE
+            binding?.progressBar?.visibility = View.INVISIBLE
+            binding?.rvPeople?.visibility = View.VISIBLE
             return
         }
     }
 
     private fun showRecyclerList(list: List<ResponseListUsersItem>) {
         val listPeopleAdapter = ListPeopleAdapter(list)
-        binding.rvPeople.adapter = listPeopleAdapter
+        binding?.rvPeople?.adapter = listPeopleAdapter
 
         listPeopleAdapter.setOnItemClickCallback(object : ListPeopleAdapter.OnItemClickCallback {
             override fun onItemClicked(data: ResponseListUsersItem) = openDetail(data)
@@ -120,6 +120,11 @@ class HomeActivity : AppCompatActivity() {
             )
         )
         startActivity(moveToDetailIntent)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (binding != null) binding = null
     }
 
     companion object {

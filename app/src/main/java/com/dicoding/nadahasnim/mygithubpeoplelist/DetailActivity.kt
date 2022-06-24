@@ -22,14 +22,14 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class DetailActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityDetailBinding
+    private var binding: ActivityDetailBinding? = null
     private lateinit var people: People
     private val detailViewModel: DetailViewModel by viewModels { DetailViewModelFactory(people.username) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(binding?.root)
 
         people = intent.getParcelableExtra(EXTRA_PEOPLE)!!
 
@@ -45,9 +45,9 @@ class DetailActivity : AppCompatActivity() {
                 val followers = it.followers.value
                 val following = it.following.value
 
-                binding.detailContent.tvFollower.text = followers?.size.toString()
-                binding.detailContent.tvFollowing.text = following?.size.toString()
-                binding.detailContent.tvRepositories.text = it.repositories.value.toString()
+                binding?.detailContent?.tvFollower?.text = followers?.size.toString()
+                binding?.detailContent?.tvFollowing?.text = following?.size.toString()
+                binding?.detailContent?.tvRepositories?.text = it.repositories.value.toString()
 
                 if (detail != null) {
                     showContent(detail)
@@ -65,7 +65,7 @@ class DetailActivity : AppCompatActivity() {
         val detailSectionsPagerAdapter =
             DetailSectionsPagerAdapter(this)
 
-        binding.detailContent.let {
+        binding?.detailContent?.let {
             Glide.with(this).load(detailUser.avatarUrl).into(it.ivAvatar)
             it.tvName.text = detailUser.name
             it.tvCompany.text = detailUser.company
@@ -80,27 +80,27 @@ class DetailActivity : AppCompatActivity() {
 
     private fun showLoadingIndicator(request: ResponseCall) {
         if (request.status == Status.LOADING) {
-            binding.errorLayout.root.visibility = View.INVISIBLE
-            binding.detailContent.root.visibility = View.INVISIBLE
-            binding.progressBar.visibility = View.VISIBLE
+            binding?.errorLayout?.root?.visibility = View.INVISIBLE
+            binding?.detailContent?.root?.visibility = View.INVISIBLE
+            binding?.progressBar?.visibility = View.VISIBLE
             return
         }
 
         if (request.status == Status.ERROR) {
-            binding.errorLayout.tvError.text = request.message
-            binding.errorLayout.btnReload.setOnClickListener {
+            binding?.errorLayout?.tvError?.text = request.message
+            binding?.errorLayout?.btnReload?.setOnClickListener {
                 detailViewModel.getUser(people.username)
             }
-            binding.detailContent.root.visibility = View.INVISIBLE
-            binding.progressBar.visibility = View.INVISIBLE
-            binding.errorLayout.root.visibility = View.VISIBLE
+            binding?.detailContent?.root?.visibility = View.INVISIBLE
+            binding?.progressBar?.visibility = View.INVISIBLE
+            binding?.errorLayout?.root?.visibility = View.VISIBLE
             return
         }
 
         if (request.status == Status.COMPLETED) {
-            binding.errorLayout.root.visibility = View.INVISIBLE
-            binding.progressBar.visibility = View.INVISIBLE
-            binding.detailContent.root.visibility = View.VISIBLE
+            binding?.errorLayout?.root?.visibility = View.INVISIBLE
+            binding?.progressBar?.visibility = View.INVISIBLE
+            binding?.detailContent?.root?.visibility = View.VISIBLE
             return
         }
     }
@@ -137,6 +137,11 @@ class DetailActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (binding != null) binding = null
     }
 
     companion object {

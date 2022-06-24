@@ -20,25 +20,25 @@ class FollowingFragment : Fragment() {
 
     private val detailViewModel: DetailViewModel by activityViewModels()
 
-    private lateinit var binding: FragmentFollowingBinding
+    private var binding: FragmentFollowingBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentFollowingBinding.inflate(inflater)
-        return binding.root
+        return binding?.root!!
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.rvFollowing.layoutManager = LinearLayoutManager(activity)
-        binding.rvFollowing.setHasFixedSize(true)
+        binding?.rvFollowing?.layoutManager = LinearLayoutManager(activity)
+        binding?.rvFollowing?.setHasFixedSize(true)
 
         detailViewModel.following.observe(viewLifecycleOwner) { following ->
             val listPeopleAdapter = ListPeopleAdapter(following)
-            binding.rvFollowing.adapter = listPeopleAdapter
+            binding?.rvFollowing?.adapter = listPeopleAdapter
             listPeopleAdapter.setOnItemClickCallback(object :
                 ListPeopleAdapter.OnItemClickCallback {
                 override fun onItemClicked(data: ResponseListUsersItem) {
@@ -59,6 +59,11 @@ class FollowingFragment : Fragment() {
             )
         )
         startActivity(moveToDetailIntent)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (binding != null) binding = null
     }
 
     companion object {
